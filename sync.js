@@ -18,7 +18,7 @@
     if(r.data&&r.data.data&&Object.keys(r.data.data).length){
       var local=snapshot();var localHas=(local.mastery_archive&&local.mastery_archive.length>2);var remoteHas=(r.data.data.mastery_archive&&r.data.data.mastery_archive.length>2);
       // last-write-wins by presence: if remote has data, merge remote in, but keep local if remote empty
-      applySnapshot(r.data.data);setStatus('Loaded from cloud');setTimeout(function(){location.reload();},300);
+      applySnapshot(r.data.data);setStatus('Loaded from cloud');window.dispatchEvent(new CustomEvent('mastery-sync-applied'));
     } else {
       // first login on this account: push existing local data up so nothing is lost
       pushNow();setStatus('Backed up');
@@ -29,7 +29,7 @@
   function setStatus(t){if(statusEl)statusEl.textContent=t;}
 
   function buildBox(){
-    var wrap=document.createElement('div');wrap.id='cloudSyncBox';wrap.style.cssText='position:fixed;z-index:99999;right:12px;bottom:12px;font-family:system-ui,sans-serif;';
+    var wrap=document.createElement('div');wrap.id='cloudSyncBox';wrap.style.cssText='margin:14px 0 4px;font-family:system-ui,sans-serif;';
     wrap.innerHTML=''
       +'<div id="csToggle" style="background:#4f8cff;color:#fff;border-radius:20px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3)">Cloud Sync</div>'
       +'<div id="csPanel" style="display:none;background:#1b1e24;color:#eee;border:1px solid #333;border-radius:12px;padding:14px;width:240px;margin-top:8px;box-shadow:0 8px 24px rgba(0,0,0,.4)">'
@@ -42,7 +42,7 @@
       +'</div>'
       +'<button id="csOut" style="display:none;width:100%;margin-top:8px;padding:8px;border:0;border-radius:8px;background:#3a2020;color:#fff;cursor:pointer">Sign out</button>'
       +'</div>';
-    document.body.appendChild(wrap);
+    var __host=document.getElementById('settings-sheet')||document.body;__host.appendChild(wrap);
     statusEl=wrap.querySelector('#csStatus');
     wrap.querySelector('#csToggle').onclick=function(){var p=wrap.querySelector('#csPanel');p.style.display=p.style.display==='none'?'block':'none';};
     wrap.querySelector('#csLogin').onclick=doLogin;
@@ -54,7 +54,7 @@
   function doLogin(){var c=creds();if(!c.email||!c.password){setStatus('Enter email + password');return;}setStatus('Signing in...');sb.auth.signInWithPassword({email:c.email,password:c.password}).then(function(r){if(r.error){setStatus(r.error.message);}else{onAuth(r.data.user);}});}
   function doLogout(){sb.auth.signOut().then(function(){user=null;setStatus('Signed out');var o=document.getElementById('csOut');if(o)o.style.display='none';});}
 
-  function onAuth(u){if(!u)return;user=u;setStatus('Signed in: '+u.email);var o=document.getElementById('csOut');if(o)o.style.display='block';pull();}
+  function onAuth(u){if(!u)return;user=u;setStatus('Signed in: '+u.email);var o=document.getElementById('csOut');if(o)o.style.display='block';pull();if(!window.__masteryPullTimer){window.__masteryPullTimer=setInterval(function(){if(user&&sb&&document.visibilityState==='visible'){pull();}},15000);}}
 
   // wrap setItem so any app write schedules a cloud push
   var _set=localStorage.setItem.bind(localStorage);

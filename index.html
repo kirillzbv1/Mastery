@@ -2039,6 +2039,18 @@ input,textarea,select,button{
 <script>
 // ══ STATE ══
 const SK='mastery_v6';
+// Migration safety-net: if a future update ever renames/bumps this key, old data is copied
+// forward instead of being silently lost. IMPORTANT: when you bump SK to a new version
+// string, add the previous SK value to LEGACY_SKS below so existing users keep their data.
+(function(){
+  var LEGACY_SKS=['mastery_v5','mastery_v4','mastery_v3','mastery_v2','mastery_v1'];
+  if(!localStorage.getItem(SK)){
+    for(var i=0;i<LEGACY_SKS.length;i++){
+      var old=localStorage.getItem(LEGACY_SKS[i]);
+      if(old){ localStorage.setItem(SK,old); break; }
+    }
+  }
+})();
 let S=JSON.parse(localStorage.getItem(SK)||'null')||{
   checks:[false,false,false,false,false],
   deepWorkBlocks:0,scrollMins:0,goals:'',goalsLocked:false,schedule:[],

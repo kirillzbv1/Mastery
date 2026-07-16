@@ -1872,8 +1872,7 @@ input,textarea,select,button{
       <div class="set-row" onclick="openSettingsSection('appearance')"><div class="set-row-label">Appearance</div><span class="set-chev">&rsaquo;</span></div>
 
       <div class="set-group-label">Data</div>
-      <div class="set-row" onclick="openSettingsSection('sync')"><div class="set-row-label">Cloud sync</div><span class="set-chev">&rsaquo;</span></div>
-      <div class="set-row" onclick="openSettingsSection('backup')"><div class="set-row-label">Backup</div><span class="set-chev">&rsaquo;</span></div>
+            <div class="set-row" onclick="openSettingsSection('backup')"><div class="set-row-label">Backup</div><span class="set-chev">&rsaquo;</span></div>
     </div>
 
     <div id="settings-sub" style="display:none">
@@ -2005,7 +2004,7 @@ let S=JSON.parse(localStorage.getItem(SK)||'null')||{
   health:{gym:false,wq:0,energy:0,recovery:0,nutrition:0,appearance:0,mental:0,stress:0},
   refl:{text:'',locked:false},streak:0,notifEnabled:false
 };
-function save(){localStorage.setItem(SK,JSON.stringify(S));scheduleSyncPush();}
+function save(){localStorage.setItem(SK,JSON.stringify(S));}
 
 const today=new Date().toDateString();
 if(localStorage.getItem('mastery_day')!==today){
@@ -2148,8 +2147,8 @@ if(!categories.find(c=>c.id==='doom')){
   categories=[...defaultCategories,...custom];
   saveCategories();
 }
-function saveGoalsList(){localStorage.setItem('mastery_goals',JSON.stringify(endYearGoals));scheduleSyncPush();}
-function saveCategories(){localStorage.setItem('mastery_categories',JSON.stringify(categories));scheduleSyncPush();}
+function saveGoalsList(){localStorage.setItem('mastery_goals',JSON.stringify(endYearGoals));}
+function saveCategories(){localStorage.setItem('mastery_categories',JSON.stringify(categories));}
 
 let endYearGoals=JSON.parse(localStorage.getItem('mastery_goals')||'null')||[
   {
@@ -2303,7 +2302,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const yc=localStorage.getItem('mastery_yc');
   if(yc){document.getElementById('continuity-text').textContent=yc;document.getElementById('continuity-card').style.display='block';}
   updateIBBanner();renderAll();updateDonut();renderCatGrid();updateLockedPlanCard();updateGoalsPill();initLockin();updateDateHeader();renderSchedWidget();setTimeout(updateNSPreview,400);renderCareerCoach();applySettings();
-  setTimeout(()=>{makeSwipeableAll();initAllSheetDrags();startWhyAutoRotate();renderGymToggle();renderGymWeekStrip();renderTimeTracker();initReflection();renderMission();syncPull(false);},300);
+  setTimeout(()=>{makeSwipeableAll();initAllSheetDrags();startWhyAutoRotate();renderGymToggle();renderGymWeekStrip();renderTimeTracker();initReflection();renderMission();},300);
   if(S.notifEnabled){document.getElementById('notif-btn').classList.add('on');document.getElementById('notif-btn').textContent='✓ On';}
   scheduleNotifs();
   if(S.goalsLocked){const _gi=document.getElementById('goal-input');if(_gi){_gi.value=S.goals;_gi.disabled=true;}const _gc=document.getElementById('goals-confirmed');if(_gc)_gc.style.display='block';const _gl=document.getElementById('goals-lbl');if(_gl)_gl.textContent='Locked';}
@@ -2454,7 +2453,7 @@ function timerWidgetTap(e){}
 let appSettings = JSON.parse(localStorage.getItem('mastery_settings') || '{"showMentor":true,"showToasts":true,"netGoal":50,"dialsGoal":500,"prepGoal":14,"customQuote":"","northStar":""}');
 
 
-function persistSettings(){localStorage.setItem('mastery_settings',JSON.stringify(appSettings));scheduleSyncPush();}
+function persistSettings(){localStorage.setItem('mastery_settings',JSON.stringify(appSettings));}
 function openSettings(){
   showSettingsMain();
   document.getElementById('settings-sheet').classList.add('show');
@@ -2482,8 +2481,7 @@ function openSettingsSection(key){
     timecats:['Time categories',renderTimeCatsSection],
     home:['Home screen',renderHomeSection],
     appearance:['Appearance',renderAppearanceSection],
-    sync:['Cloud sync',renderSyncSection],
-    backup:['Backup',renderBackupSection],
+        backup:['Backup',renderBackupSection],
   };
   const s=secs[key];if(!s)return;
   document.getElementById('settings-main').style.display='none';
@@ -2590,15 +2588,6 @@ function renderAppearanceSection(body){
   renderAccentSwatches();
 }
 function pickAccent(v){appSettings.accent=v;persistSettings();applyAccent();renderAccentSwatches();}
-function syncCodeChanged(el){appSettings.syncCode=el.value.trim();persistSettings();}
-function renderSyncSection(body){
-  body.innerHTML='<input class="m-inp" id="setting-synccode" placeholder="Sync code — same on every device" value="'+((appSettings.syncCode||'')+'').replace(/"/g,'&quot;')+'" onchange="syncCodeChanged(this)" style="margin-bottom:10px">'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
-      '<button class="btn btn-g" style="padding:11px;font-size:13px" onclick="syncCodeChanged(document.getElementById(&quot;setting-synccode&quot;));syncNow()">Sync now</button>'+
-      '<div id="sync-status" style="display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink4)">'+((appSettings.syncCode||'').length>=4?'Connected':'Not connected')+'</div>'+
-    '</div>'+
-    '<div style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.5">Pick any private code and enter the same one on your phone and computer. Changes sync automatically a few seconds after you make them.</div>';
-}
 function renderBackupSection(body){
   body.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
       '<button class="btn btn-g" style="padding:11px;font-size:13px" onclick="exportBackup()">Export backup</button>'+
@@ -2847,13 +2836,13 @@ function saveTimeCats(){
   localStorage.setItem('mastery_timecats',JSON.stringify(TIME_CATS));
   categories=TIME_CATS.map(c=>({id:c.id,label:c.label,color:c.color}));
   saveCategories();
-  scheduleSyncPush();
+  
 }
 let selectedTimeCat='work';
 
 function timeLogKey(){return 'mastery_timelog_'+new Date().toISOString().split('T')[0];}
 function getTimeLog(){const l=JSON.parse(localStorage.getItem(timeLogKey())||'[]');l.forEach(e=>{if(e.cat==='deepwork')e.cat='work';});return l;}
-function setTimeLog(arr){localStorage.setItem(timeLogKey(),JSON.stringify(arr));scheduleSyncPush();}
+function setTimeLog(arr){localStorage.setItem(timeLogKey(),JSON.stringify(arr));}
 
 function openTimeSheet(){
   renderTimeCatGrid();
@@ -3301,54 +3290,7 @@ function exportDayReport(){
 }
 
 
-// ═══════════════════════════════════════════
-// CLOUD SYNC — phone ↔ computer, survives updates
-// ═══════════════════════════════════════════
-let syncTO=null;
-function syncCode(){return ((appSettings.syncCode||'')+'').trim();}
-function collectSyncData(){
-  const data={};
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if((k.startsWith('mastery')||k.startsWith('m_'))&&k!=='mastery_sync_updated')data[k]=localStorage.getItem(k);
-  }
-  return data;
-}
-async function syncPush(){
-  const id=syncCode();if(id.length<4)return;
-  const updatedAt=Date.now();
-  try{
-    const r=await fetch('/api/sync?id='+encodeURIComponent(id),{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({updatedAt,data:collectSyncData()})
-    });
-    if(r.ok){localStorage.setItem('mastery_sync_updated',updatedAt);
-      const st=document.getElementById('sync-status');if(st)st.textContent='Synced just now';}
-  }catch(e){}
-}
-function scheduleSyncPush(){
-  if(syncCode().length<4)return;
-  clearTimeout(syncTO);
-  syncTO=setTimeout(syncPush,2500);
-}
-async function syncPull(manual){
-  const id=syncCode();if(id.length<4)return;
-  try{
-    const r=await fetch('/api/sync?id='+encodeURIComponent(id));
-    const j=await r.json();
-    if(!j.data)return;
-    const localMark=parseInt(localStorage.getItem('mastery_sync_updated')||'0');
-    if(j.data.updatedAt>localMark){
-      Object.keys(j.data.data||{}).forEach(k=>{
-        if(k.startsWith('mastery')||k.startsWith('m_'))localStorage.setItem(k,j.data.data[k]);
-      });
-      localStorage.setItem('mastery_sync_updated',j.data.updatedAt);
-      showToast('Synced from cloud — reloading','s');
-      setTimeout(()=>location.reload(),700);
-    } else if(manual){showToast('Already up to date','s');}
-  }catch(e){if(manual)showToast('Sync failed — check setup','w');}
-}
-function syncNow(){syncPull(true);setTimeout(syncPush,1200);}
+
 
 
 // ─── DAILY QUOTE ───

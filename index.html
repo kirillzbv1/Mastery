@@ -859,13 +859,14 @@ body.light-mode .card{
 .gc-prog-val{font-size:15px;font-weight:700;min-width:52px;text-align:right;letter-spacing:-.02em}
 .gc-add-row{display:flex;align-items:center;gap:8px;padding-top:2px}
 .gc-input{
-  flex:1;background:transparent;
-  border:none;border-bottom:1px solid var(--sep2);
-  border-radius:0;padding:7px 2px;
+  flex:1;background:rgba(0,0,0,0.22);
+  border:0.5px solid var(--sep);
+  border-radius:22px;padding:10px 16px;
   font-family:var(--body);font-size:14px;color:var(--ink);outline:none;
-  box-shadow:none;transition:border-color 0.2s;
+  transition:border-color 0.2s;
 }
-.gc-input:focus{border-bottom-color:var(--acc)}
+.gc-input:focus{border-color:var(--acc-b)}
+body.light-mode .gc-input{background:rgba(0,0,0,0.04)}
 .gc-input::placeholder{color:var(--ink4)}
 .gc-input:focus{border-color:var(--acc-b)}
 body.light-mode .gc-input{background:rgba(0,0,0,0.05);border:0.5px solid rgba(0,0,0,0.12)}
@@ -1200,13 +1201,15 @@ body.light-mode .qd-btn{background:#f3f3f6}
 body.light-mode .rate-slider{background:linear-gradient(90deg,var(--fillcolor,var(--acc)) var(--fill,0%),rgba(0,0,0,0.10) var(--fill,0%))}
 
 /* Reflection: smaller box */
-.refl-ta-min{min-height:110px!important}
+.refl-ta-min{min-height:72px!important}
 
 /* Mission rows */
-.mission-row{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:0.5px solid var(--sep);cursor:pointer}
+.mission-list{padding:2px}
+.mission-row{display:flex;align-items:center;gap:13px;padding:15px 2px;border-bottom:0.5px solid var(--sep);cursor:pointer;transition:opacity 0.15s;-webkit-tap-highlight-color:transparent}
 .mission-row:last-child{border-bottom:none}
-.mission-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.mission-title{font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-.01em;flex:1}
+.mission-row:active{opacity:0.55}
+.mission-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;box-shadow:0 0 0 3px color-mix(in srgb,currentColor 0%, transparent)}
+.mission-title{font-size:15px;font-weight:500;color:var(--ink2);letter-spacing:-.01em;flex:1;font-style:italic}
 
 /* Accent swatch */
 .accent-swatch{width:34px;height:34px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.15s var(--spring)}
@@ -1247,6 +1250,24 @@ body.light-mode .rate-slider{background:linear-gradient(90deg,var(--fillcolor,va
 .why-dots{display:flex;gap:5px;align-items:center}
 .why-dot{width:5px;height:5px;border-radius:50%;background:var(--sep2);transition:all 0.25s}
 .why-dot.on{width:16px;border-radius:3px}
+
+.hero-quote{
+  font-size:13px;font-style:italic;color:var(--ink4);
+  padding:0 2px 16px;line-height:1.7;letter-spacing:-.005em;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;max-width:460px;
+}
+.hero-quote:active{color:var(--ink3)}
+
+/* SETTINGS NAV */
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:14px 2px;border-bottom:0.5px solid var(--sep);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.set-row:active{opacity:0.55}
+.set-row-label{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.set-chev{color:var(--ink4);font-size:18px;font-weight:400}
+.set-group-label{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--ink4);padding:20px 2px 6px}
+.set-back{display:inline-flex;align-items:center;gap:2px;font-size:14px;font-weight:600;color:var(--acc);cursor:pointer;padding:2px 0 12px;-webkit-tap-highlight-color:transparent}
+#settings-sub{animation:setSlide 0.26s var(--ease)}
+@keyframes setSlide{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:translateX(0)}}
+.set-field-label{font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:7px}
 ::-webkit-scrollbar{width:0}
 @media(min-width:560px){main{padding:24px 20px calc(96px + var(--safe-bot))}}
 
@@ -1473,7 +1494,7 @@ input,textarea,select,button{
 
   <!-- DATE HEADER -->
   <div class="m-date-row">
-    <div class="m-date-text" id="morning-date-display">Monday, June 16</div>
+    <div class="m-date-text" id="morning-date-display" onclick="openDatePicker()" style="cursor:pointer">Monday, June 16</div>
     <button class="m-date-btn" onclick="openDatePicker()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
     </button>
@@ -1535,7 +1556,7 @@ input,textarea,select,button{
         <span>Focus</span>
         <span id="ftimer-status" style="color:var(--green);font-size:11px">Ready</span>
       </div>
-      <div class="timer-ring-wrap">
+      <div class="timer-ring-wrap" onclick="clickWT()" style="cursor:pointer">
         <svg width="72" height="72" viewBox="0 0 72 72" style="transform:rotate(-90deg)">
           <circle cx="36" cy="36" r="28" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="6"/>
           <circle id="wt-ring" cx="36" cy="36" r="28" fill="none" stroke="var(--green2)"
@@ -1544,10 +1565,6 @@ input,textarea,select,button{
         <div class="timer-ring-inner">
           <div class="timer-ring-time" id="wt-display">30:00</div>
         </div>
-      </div>
-      <div class="timer-w-btns">
-        <button id="wt-btn" class="timer-w-btn timer-w-btn-go" onclick="toggleWT()">Start</button>
-        <button class="timer-w-btn timer-w-btn-reset" onclick="resetWT()">Reset</button>
       </div>
     </div>
 
@@ -1638,7 +1655,7 @@ input,textarea,select,button{
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <div class="sheet-title" style="margin-bottom:0">Schedule</div>
       <div style="display:flex;gap:8px">
-        <button class="pill" onclick="openCatEditor()" style="color:var(--ink3)">Edit categories</button>
+        <button class="pill" onclick="closeSchedSheet();openSettings();openSettingsSection(&quot;timecats&quot;)" style="color:var(--ink3)">Edit categories</button>
         <button class="pill" onclick="openModal()">+ Add</button>
         <button class="pill" onclick="exportToOutlook()" style="color:var(--blue)">Outlook</button>
       </div>
@@ -1668,8 +1685,7 @@ input,textarea,select,button{
     <div class="gc-head"><div class="gc-label" style="margin-bottom:0">Interview Prep</div><div class="gc-val" id="prep-hrs" style="color:var(--blue)">0h 0m</div></div>
     <div class="gc-prog-bg" style="margin-bottom:12px"><div id="prep-prog" class="gc-prog-fill" style="width:0%;background:var(--blue2)"></div></div>
     <div class="gc-add-row">
-      <input class="gc-input" id="prep-input" type="number" placeholder="Minutes">
-      <button class="gc-btn" onclick="addPrep()" style="color:var(--blue);border-color:var(--blue-b);background:var(--blue-bg)">+ Log</button>
+      <input class="gc-input" id="prep-input" type="number" placeholder="Minutes" enterkeyhint="done" onkeydown="if(event.key===&quot;Enter&quot;){addPrep();this.blur();}">
     </div>
   </div>
 
@@ -1678,8 +1694,7 @@ input,textarea,select,button{
     <div class="gc-head"><div class="gc-label" style="margin-bottom:0">Networking</div><div class="gc-val" id="net-count" style="color:var(--green)">0 / 50</div></div>
     <div class="gc-prog-bg" style="margin-bottom:12px"><div id="net-prog" class="gc-prog-fill" style="width:0%;background:var(--green2)"></div></div>
     <div class="gc-add-row">
-      <input class="gc-input" id="net-input" type="number" placeholder="Emails">
-      <button class="gc-btn" onclick="addNetworking()" style="color:var(--green);border-color:var(--green-b);background:var(--green-bg)">+ Log</button>
+      <input class="gc-input" id="net-input" type="number" placeholder="Emails" enterkeyhint="done" onkeydown="if(event.key===&quot;Enter&quot;){addNetworking();this.blur();}">
     </div>
   </div>
 
@@ -1688,8 +1703,7 @@ input,textarea,select,button{
     <div class="gc-head"><div class="gc-label" style="margin-bottom:0">Valemont Dials</div><div class="gc-val" id="dials-count" style="color:var(--purple)">0 / 500</div></div>
     <div class="gc-prog-bg" style="margin-bottom:12px"><div id="dials-prog" class="gc-prog-fill" style="width:0%;background:var(--purple)"></div></div>
     <div class="gc-add-row">
-      <input class="gc-input" id="dials-input" type="number" placeholder="Dials">
-      <button class="gc-btn" onclick="addDials()" style="color:var(--purple);border-color:rgba(152,88,208,0.28);background:rgba(152,88,208,0.10)">+ Log</button>
+      <input class="gc-input" id="dials-input" type="number" placeholder="Dials" enterkeyhint="done" onkeydown="if(event.key===&quot;Enter&quot;){addDials();this.blur();}">
     </div>
   </div>
 
@@ -1698,8 +1712,7 @@ input,textarea,select,button{
     <div class="gc-head"><div class="gc-label" style="margin-bottom:0">Insightful Learning</div><div class="gc-val" id="learn-mins" style="color:var(--acc)">0 min</div></div>
     <div class="gc-prog-bg" style="margin-bottom:12px"><div id="learn-prog" class="gc-prog-fill" style="width:0%;background:var(--acc2)"></div></div>
     <div class="gc-add-row">
-      <input class="gc-input" id="learn-input" type="number" placeholder="Minutes">
-      <button class="gc-btn" onclick="addLearn()" style="color:var(--acc);border-color:var(--acc-b);background:var(--acc-bg)">+ Log</button>
+      <input class="gc-input" id="learn-input" type="number" placeholder="Minutes" enterkeyhint="done" onkeydown="if(event.key===&quot;Enter&quot;){addLearn();this.blur();}">
     </div>
   </div>
 
@@ -1759,7 +1772,7 @@ input,textarea,select,button{
   </div>
 
   <div class="refl-surface">
-    <textarea class="refl-ta-min" id="r1" placeholder="Write honestly…"></textarea>
+    <textarea class="refl-ta-min" id="r1"></textarea>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
       <span id="refl-confirmed" style="display:none;font-size:12px;font-weight:700;color:var(--green)">Saved</span>
       <span></span>
@@ -1773,7 +1786,7 @@ input,textarea,select,button{
       <div class="gc-label" style="margin-bottom:0">The Mission</div>
       <button class="pill" onclick="openWhyModal()" style="font-size:11px;padding:5px 12px">Why you do this</button>
     </div>
-    <div class="glass-card" style="padding:6px 18px" id="refl-goals"></div>
+    <div class="mission-list" id="refl-goals"></div>
   </div>
   <span id="push-list" style="display:none"></span>
 
@@ -1836,93 +1849,39 @@ input,textarea,select,button{
 </section>
 <!-- SETTINGS SHEET -->
 <div class="sheet-overlay" id="settings-sheet" onclick="closeSettings(event)">
-  <div class="sheet-panel" onclick="event.stopPropagation()">
+  <div class="sheet-panel" onclick="event.stopPropagation()" style="max-height:88vh">
     <div class="sheet-handle"></div>
-    <div class="sheet-title" style="margin-bottom:16px">Settings</div>
 
-    <!-- Toggle: Mentor Notes -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div>
-        <div style="font-size:15px;font-weight:600;color:var(--ink)">Mentor Notes</div>
-        <div style="font-size:12px;color:var(--ink4);margin-top:2px">Accountability insights in Career tab</div>
+    <div id="settings-main">
+      <div class="sheet-title" style="margin-bottom:6px">Settings</div>
+
+      <div class="set-row" style="cursor:default">
+        <div class="set-row-label">Mentor notes</div>
+        <div class="toggle-switch" id="toggle-mentor" onclick="toggleSetting('showMentor')"><div class="toggle-knob"></div></div>
       </div>
-      <div class="toggle-switch" id="toggle-mentor" onclick="toggleSetting('showMentor')">
-        <div class="toggle-knob"></div>
+      <div class="set-row" style="cursor:default">
+        <div class="set-row-label">Progress toasts</div>
+        <div class="toggle-switch" id="toggle-toasts" onclick="toggleSetting('showToasts')"><div class="toggle-knob"></div></div>
       </div>
+
+      <div class="set-group-label">Customize</div>
+      <div class="set-row" onclick="openSettingsSection('targets')"><div class="set-row-label">Weekly targets</div><span class="set-chev">&rsaquo;</span></div>
+      <div class="set-row" onclick="openSettingsSection('goals')"><div class="set-row-label">Your goals</div><span class="set-chev">&rsaquo;</span></div>
+      <div class="set-row" onclick="openSettingsSection('timecats')"><div class="set-row-label">Time categories</div><span class="set-chev">&rsaquo;</span></div>
+      <div class="set-row" onclick="openSettingsSection('home')"><div class="set-row-label">Home screen</div><span class="set-chev">&rsaquo;</span></div>
+      <div class="set-row" onclick="openSettingsSection('appearance')"><div class="set-row-label">Appearance</div><span class="set-chev">&rsaquo;</span></div>
+
+      <div class="set-group-label">Data</div>
+      <div class="set-row" onclick="openSettingsSection('sync')"><div class="set-row-label">Cloud sync</div><span class="set-chev">&rsaquo;</span></div>
+      <div class="set-row" onclick="openSettingsSection('backup')"><div class="set-row-label">Backup</div><span class="set-chev">&rsaquo;</span></div>
     </div>
 
-    <!-- Toggle: Behind Target toasts -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div>
-        <div style="font-size:15px;font-weight:600;color:var(--ink)">Progress Toasts</div>
-        <div style="font-size:12px;color:var(--ink4);margin-top:2px">Show remaining targets below each tracker</div>
-      </div>
-      <div class="toggle-switch" id="toggle-toasts" onclick="toggleSetting('showToasts')">
-        <div class="toggle-knob"></div>
-      </div>
+    <div id="settings-sub" style="display:none">
+      <div class="set-back" onclick="showSettingsMain()">&lsaquo; Settings</div>
+      <div class="sheet-title" id="settings-sub-title" style="margin-bottom:14px"></div>
+      <div id="settings-sub-body"></div>
     </div>
 
-    <!-- Weekly goal: emails -->
-    <div style="padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">Networking goal / week</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input type="number" id="setting-net-goal" class="gc-input" style="max-width:100px" placeholder="50">
-        <span style="font-size:13px;color:var(--ink3)">emails</span>
-      </div>
-    </div>
-
-    <!-- Weekly goal: dials -->
-    <div style="padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">Valemont goal / week</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input type="number" id="setting-dials-goal" class="gc-input" style="max-width:100px" placeholder="500">
-        <span style="font-size:13px;color:var(--ink3)">dials</span>
-      </div>
-    </div>
-
-    <!-- Weekly goal: prep hours -->
-    <div style="padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">Prep goal / week</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input type="number" id="setting-prep-goal" class="gc-input" style="max-width:100px" placeholder="14">
-        <span style="font-size:13px;color:var(--ink3)">hours</span>
-      </div>
-    </div>
-
-    <!-- Custom quote -->
-    <div style="padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">Custom quote</div>
-      <textarea id="setting-quote" class="refl-ta" rows="2" placeholder="Add your own quote to the rotation…" style="min-height:auto"></textarea>
-    </div>
-
-    <!-- North Star text -->
-    <div style="padding:14px 0;border-bottom:0.5px solid var(--sep)">
-      <div style="font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px">North Star</div>
-      <textarea id="setting-northstar" class="refl-ta" rows="3" placeholder="Your North Star vision…" style="min-height:auto"></textarea>
-    </div>
-
-
-    <!-- ── HOME SCREEN WIDGETS ── -->
-    <div style="padding:16px 0 6px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--acc)">Home Screen</div>
-    <div id="widget-toggles"></div>
-
-    <!-- ── ACCENT COLOR ── -->
-    <div style="padding:16px 0 6px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--acc)">Accent Color</div>
-    <div id="accent-swatches" style="display:flex;gap:10px;padding:8px 0 14px;border-bottom:0.5px solid var(--sep)"></div>
-
-    <!-- ── DATA & SYNC ── -->
-    <div style="padding:16px 0 6px;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--acc)">Data & Backup</div>
-    <div style="padding:8px 0 14px;border-bottom:0.5px solid var(--sep)">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn btn-g" style="padding:11px;font-size:13px" onclick="exportBackup()">Export backup</button>
-        <button class="btn btn-g" style="padding:11px;font-size:13px" onclick="document.getElementById('backup-file').click()">Import backup</button>
-      </div>
-      <input type="file" id="backup-file" accept=".json" style="display:none" onchange="importBackup(event)">
-      <div style="font-size:11px;color:var(--ink4);margin-top:8px;line-height:1.5">Export before updates. Import on your other device to transfer everything.</div>
-    </div>
-
-    <button class="btn btn-p" onclick="saveSettings()" style="margin-top:20px">Save changes</button>
-    <button onclick="closeSettings()" class="btn btn-g" style="margin-top:8px">Cancel</button>
   </div>
 </div>
 
@@ -2039,18 +1998,6 @@ input,textarea,select,button{
 <script>
 // ══ STATE ══
 const SK='mastery_v6';
-// Migration safety-net: if a future update ever renames/bumps this key, old data is copied
-// forward instead of being silently lost. IMPORTANT: when you bump SK to a new version
-// string, add the previous SK value to LEGACY_SKS below so existing users keep their data.
-(function(){
-  var LEGACY_SKS=['mastery_v5','mastery_v4','mastery_v3','mastery_v2','mastery_v1'];
-  if(!localStorage.getItem(SK)){
-    for(var i=0;i<LEGACY_SKS.length;i++){
-      var old=localStorage.getItem(LEGACY_SKS[i]);
-      if(old){ localStorage.setItem(SK,old); break; }
-    }
-  }
-})();
 let S=JSON.parse(localStorage.getItem(SK)||'null')||{
   checks:[false,false,false,false,false],
   deepWorkBlocks:0,scrollMins:0,goals:'',goalsLocked:false,schedule:[],
@@ -2058,7 +2005,7 @@ let S=JSON.parse(localStorage.getItem(SK)||'null')||{
   health:{gym:false,wq:0,energy:0,recovery:0,nutrition:0,appearance:0,mental:0,stress:0},
   refl:{text:'',locked:false},streak:0,notifEnabled:false
 };
-function save(){localStorage.setItem(SK,JSON.stringify(S))}
+function save(){localStorage.setItem(SK,JSON.stringify(S));scheduleSyncPush();}
 
 const today=new Date().toDateString();
 if(localStorage.getItem('mastery_day')!==today){
@@ -2201,9 +2148,10 @@ if(!categories.find(c=>c.id==='doom')){
   categories=[...defaultCategories,...custom];
   saveCategories();
 }
-function saveCategories(){localStorage.setItem('mastery_categories',JSON.stringify(categories));}
+function saveGoalsList(){localStorage.setItem('mastery_goals',JSON.stringify(endYearGoals));scheduleSyncPush();}
+function saveCategories(){localStorage.setItem('mastery_categories',JSON.stringify(categories));scheduleSyncPush();}
 
-const endYearGoals=[
+let endYearGoals=JSON.parse(localStorage.getItem('mastery_goals')||'null')||[
   {
     title:'Land the Internship',
     sub:'EB / IB / PE — Summer + Fall pipeline',
@@ -2355,7 +2303,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const yc=localStorage.getItem('mastery_yc');
   if(yc){document.getElementById('continuity-text').textContent=yc;document.getElementById('continuity-card').style.display='block';}
   updateIBBanner();renderAll();updateDonut();renderCatGrid();updateLockedPlanCard();updateGoalsPill();initLockin();updateDateHeader();renderSchedWidget();setTimeout(updateNSPreview,400);renderCareerCoach();applySettings();
-  setTimeout(()=>{makeSwipeableAll();initAllSheetDrags();startWhyAutoRotate();renderGymToggle();renderGymWeekStrip();renderTimeTracker();initReflection();renderMission();},300);
+  setTimeout(()=>{makeSwipeableAll();initAllSheetDrags();startWhyAutoRotate();renderGymToggle();renderGymWeekStrip();renderTimeTracker();initReflection();renderMission();syncPull(false);},300);
   if(S.notifEnabled){document.getElementById('notif-btn').classList.add('on');document.getElementById('notif-btn').textContent='✓ On';}
   scheduleNotifs();
   if(S.goalsLocked){const _gi=document.getElementById('goal-input');if(_gi){_gi.value=S.goals;_gi.disabled=true;}const _gc=document.getElementById('goals-confirmed');if(_gc)_gc.style.display='block';const _gl=document.getElementById('goals-lbl');if(_gl)_gl.textContent='Locked';}
@@ -2505,20 +2453,161 @@ function timerWidgetTap(e){}
 // ─── SETTINGS ───
 let appSettings = JSON.parse(localStorage.getItem('mastery_settings') || '{"showMentor":true,"showToasts":true,"netGoal":50,"dialsGoal":500,"prepGoal":14,"customQuote":"","northStar":""}');
 
+
+function persistSettings(){localStorage.setItem('mastery_settings',JSON.stringify(appSettings));scheduleSyncPush();}
 function openSettings(){
-  document.body.classList.add('sheet-open');
-  // Populate fields from saved settings
-  document.getElementById('setting-net-goal').value = appSettings.netGoal || 50;
-  document.getElementById('setting-dials-goal').value = appSettings.dialsGoal || 500;
-  document.getElementById('setting-prep-goal').value = appSettings.prepGoal || 14;
-  document.getElementById('setting-quote').value = appSettings.customQuote || '';
-  document.getElementById('setting-northstar').value = appSettings.northStar || '';
-  // Set toggle states
-  updateToggleUI('toggle-mentor', appSettings.showMentor !== false);
-  updateToggleUI('toggle-toasts', appSettings.showToasts !== false);
-  renderWidgetToggles();renderAccentSwatches();
+  showSettingsMain();
   document.getElementById('settings-sheet').classList.add('show');
+  document.body.classList.add('sheet-open');
 }
+function showSettingsMain(){
+  const mainEl=document.getElementById('settings-main'),sub=document.getElementById('settings-sub');
+  if(mainEl)mainEl.style.display='';
+  if(sub)sub.style.display='none';
+  updateToggleUI('toggle-mentor',appSettings.showMentor!==false);
+  updateToggleUI('toggle-toasts',appSettings.showToasts!==false);
+}
+function toggleSetting(key){
+  appSettings[key]=appSettings[key]===false?true:false;
+  if(key==='showMentor')updateToggleUI('toggle-mentor',appSettings.showMentor!==false);
+  if(key==='showToasts')updateToggleUI('toggle-toasts',appSettings.showToasts!==false);
+  persistSettings();
+  try{renderCareerCoach();renderTimeTracker();}catch(e){}
+}
+function saveSettings(){persistSettings();}
+function openSettingsSection(key){
+  const secs={
+    targets:['Weekly targets',renderTargetsSection],
+    goals:['Your goals',renderGoalsSection],
+    timecats:['Time categories',renderTimeCatsSection],
+    home:['Home screen',renderHomeSection],
+    appearance:['Appearance',renderAppearanceSection],
+    sync:['Cloud sync',renderSyncSection],
+    backup:['Backup',renderBackupSection],
+  };
+  const s=secs[key];if(!s)return;
+  document.getElementById('settings-main').style.display='none';
+  const sub=document.getElementById('settings-sub');
+  sub.style.display='';
+  document.getElementById('settings-sub-title').textContent=s[0];
+  const body=document.getElementById('settings-sub-body');
+  body.innerHTML='';
+  s[1](body);
+}
+function setTargetVal(key,el,def){appSettings[key]=parseInt(el.value)||def;persistSettings();try{renderCareerCoach();}catch(e){}}
+function renderTargetsSection(body){
+  const f=(label,key,def,unit)=>'<div style="padding:10px 0;border-bottom:0.5px solid var(--sep)">'+
+    '<div class="set-field-label">'+label+'</div>'+
+    '<div style="display:flex;align-items:center;gap:10px"><input type="number" class="m-inp" style="max-width:110px" value="'+(appSettings[key]||def)+'" onchange="setTargetVal('+"'"+key+"'"+',this,'+def+')"><span style="font-size:13px;color:var(--ink3)">'+unit+'</span></div></div>';
+  body.innerHTML=f('Networking','netGoal',50,'emails / week')+f('Valemont dials','dialsGoal',500,'dials / week')+f('Interview prep','prepGoal',14,'hours / week');
+}
+function addGoalRow(){
+  endYearGoals.push({title:'New goal',color:CAT_COLORS[endYearGoals.length%CAT_COLORS.length],sub:'',why:'',action:'',next:''});
+  saveGoalsList();renderGoalsEditor();renderGoals();renderMission();
+}
+function editGoalTitle(i,el){if(el.value.trim())endYearGoals[i].title=el.value.trim();saveGoalsList();renderGoals();renderMission();}
+function editGoalNext(i,el){endYearGoals[i].next=el.value.trim();saveGoalsList();}
+function deleteGoal(i){if(endYearGoals.length<=1){showToast('Keep at least one goal','w');return;}endYearGoals.splice(i,1);saveGoalsList();renderGoalsEditor();renderGoals();renderMission();}
+function renderGoalsSection(body){
+  body.innerHTML='<div id="goals-editor"></div><button class="btn btn-g" style="margin-top:14px" onclick="addGoalRow()">+ Add goal</button>';
+  renderGoalsEditor();
+}
+function renderGoalsEditor(){
+  const el=document.getElementById('goals-editor');
+  if(!el)return;
+  el.innerHTML=endYearGoals.map((g,i)=>
+    '<div style="padding:12px 0;border-bottom:0.5px solid var(--sep)">'+
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+
+      '<div style="width:16px;height:16px;border-radius:5px;background:'+g.color+';flex-shrink:0;cursor:pointer" onclick="cycleGoalColor('+i+',this)"></div>'+
+      '<input class="m-inp" style="flex:1;padding:8px 12px" value="'+(g.title||'').replace(/"/g,'&quot;')+'" onchange="editGoalTitle('+i+',this)">'+
+      '<button onclick="deleteGoal('+i+')" style="background:none;border:none;color:var(--ink4);font-size:16px;cursor:pointer;padding:2px 6px">&times;</button>'+
+    '</div>'+
+    '<input class="m-inp" style="width:100%;padding:8px 12px;font-size:12px" value="'+(g.next||'').replace(/"/g,'&quot;')+'" placeholder="Next concrete step" onchange="editGoalNext('+i+',this)">'+
+    '</div>'
+  ).join('');
+}
+function renderTimeCatsSection(body){
+  body.innerHTML='<div style="font-size:12px;color:var(--ink4);margin-bottom:6px;line-height:1.5">These drive your calendar, day bar, brain, and reports.</div>'+
+    '<div id="timecats-editor"></div>'+
+    '<button class="btn btn-g" style="margin-top:14px" onclick="addTimeCat()">+ New category</button>';
+  renderTimeCatsEditor();
+}
+function renderTimeCatsEditor(){
+  const el=document.getElementById('timecats-editor');
+  if(!el)return;
+  const modes=[['prod','Productive'],['neutral','Neutral'],['junk','Junk']];
+  el.innerHTML=TIME_CATS.map((c,i)=>{
+    const cur=catMode(c);
+    return '<div style="padding:11px 0;border-bottom:0.5px solid var(--sep)">'+
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+
+      '<div style="width:16px;height:16px;border-radius:5px;background:'+c.color+';flex-shrink:0;cursor:pointer" onclick="cycleTimeCatColor('+i+',this)"></div>'+
+      '<input class="m-inp" style="flex:1;padding:8px 12px" value="'+c.label.replace(/"/g,'&quot;')+'" onchange="renameTimeCat('+i+',this)">'+
+      '<button onclick="deleteTimeCat('+i+')" style="background:none;border:none;color:var(--ink4);font-size:16px;cursor:pointer;padding:2px 6px">&times;</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:6px">'+modes.map(function(md){
+      return '<button onclick="setCatWeight('+"'"+c.id+"','"+md[0]+"'"+')" style="flex:1;padding:7px 0;border-radius:12px;font-size:11px;font-weight:700;cursor:pointer;border:0.5px solid '+(cur===md[0]?'var(--acc-b)':'var(--sep)')+';background:'+(cur===md[0]?'var(--acc-bg)':'transparent')+';color:'+(cur===md[0]?'var(--acc)':'var(--ink4)')+'">'+md[1]+'</button>';
+    }).join('')+
+    '</div></div>';
+  }).join('');
+}
+function cycleTimeCatColor(i,dot){
+  const idx=CAT_COLORS.indexOf(TIME_CATS[i].color);
+  TIME_CATS[i].color=CAT_COLORS[(idx+1)%CAT_COLORS.length];
+  if(dot)dot.style.background=TIME_CATS[i].color;
+  saveTimeCats();renderTimeTracker();renderSchedWidget();
+}
+function renameTimeCat(i,el){
+  if(!el.value.trim())return;
+  TIME_CATS[i].label=el.value.trim();
+  saveTimeCats();renderTimeTracker();renderSchedWidget();
+}
+function addTimeCat(){
+  const id='custom_'+Date.now();
+  TIME_CATS.push({id:id,label:'New category',color:CAT_COLORS[TIME_CATS.length%CAT_COLORS.length],dopamine:0,productive:0});
+  saveTimeCats();renderTimeCatsEditor();
+}
+function deleteTimeCat(i){
+  if(TIME_CATS.length<=3){showToast('Keep at least 3 categories','w');return;}
+  TIME_CATS.splice(i,1);
+  saveTimeCats();renderTimeCatsEditor();renderTimeTracker();
+}
+function setCatWeight(id,mode){
+  if(!appSettings.catWeights)appSettings.catWeights={};
+  appSettings.catWeights[id]=mode==='junk'?{d:1,p:0}:mode==='prod'?{d:0,p:1}:{d:0,p:0};
+  persistSettings();renderTimeCatsEditor();renderTimeTracker();
+}
+function renderHomeSection(body){
+  body.innerHTML='<div id="widget-toggles"></div>';
+  renderWidgetToggles();
+}
+function toggleWidget(key){
+  if(!appSettings.widgets)appSettings.widgets={};
+  appSettings.widgets[key]=appSettings.widgets[key]===false?true:false;
+  persistSettings();applyWidgets();renderWidgetToggles();
+}
+function renderAppearanceSection(body){
+  body.innerHTML='<div class="set-field-label" style="margin-bottom:10px">Accent color</div><div id="accent-swatches" style="display:flex;gap:10px;padding:4px 0 10px"></div>';
+  renderAccentSwatches();
+}
+function pickAccent(v){appSettings.accent=v;persistSettings();applyAccent();renderAccentSwatches();}
+function syncCodeChanged(el){appSettings.syncCode=el.value.trim();persistSettings();}
+function renderSyncSection(body){
+  body.innerHTML='<input class="m-inp" id="setting-synccode" placeholder="Sync code — same on every device" value="'+((appSettings.syncCode||'')+'').replace(/"/g,'&quot;')+'" onchange="syncCodeChanged(this)" style="margin-bottom:10px">'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+      '<button class="btn btn-g" style="padding:11px;font-size:13px" onclick="syncCodeChanged(document.getElementById(&quot;setting-synccode&quot;));syncNow()">Sync now</button>'+
+      '<div id="sync-status" style="display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--ink4)">'+((appSettings.syncCode||'').length>=4?'Connected':'Not connected')+'</div>'+
+    '</div>'+
+    '<div style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.5">Pick any private code and enter the same one on your phone and computer. Changes sync automatically a few seconds after you make them.</div>';
+}
+function renderBackupSection(body){
+  body.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+      '<button class="btn btn-g" style="padding:11px;font-size:13px" onclick="exportBackup()">Export backup</button>'+
+      '<button class="btn btn-g" style="padding:11px;font-size:13px" onclick="document.getElementById(&quot;backup-file&quot;).click()">Import backup</button>'+
+    '</div>'+
+    '<input type="file" id="backup-file" accept=".json" style="display:none" onchange="importBackup(event)">'+
+    '<div style="font-size:11px;color:var(--ink4);margin-top:10px;line-height:1.5">Export before updates. Import on another device to transfer everything.</div>';
+}
+
 function closeSettings(e){
   if(!e || e.target === document.getElementById('settings-sheet')){
     document.getElementById('settings-sheet').classList.remove('show');
@@ -2529,24 +2618,8 @@ function updateToggleUI(id, on){
   const el = document.getElementById(id);
   if(el) el.classList.toggle('on', on);
 }
-function toggleSetting(key){
-  appSettings[key] = !appSettings[key];
-  if(key === 'showMentor') updateToggleUI('toggle-mentor', appSettings.showMentor);
-  if(key === 'showToasts') updateToggleUI('toggle-toasts', appSettings.showToasts);
-}
-function saveSettings(){
-  appSettings.netGoal = parseInt(document.getElementById('setting-net-goal').value) || 50;
-  appSettings.dialsGoal = parseInt(document.getElementById('setting-dials-goal').value) || 500;
-  appSettings.prepGoal = parseInt(document.getElementById('setting-prep-goal').value) || 14;
-  appSettings.customQuote = document.getElementById('setting-quote').value.trim();
-  appSettings.northStar = document.getElementById('setting-northstar').value.trim();
-  localStorage.setItem('mastery_settings', JSON.stringify(appSettings));
-  applyWidgets();applyAccent();
-  // Apply immediately
-  applySettings();
-  closeSettings();
-  showToast('Settings saved','s');
-}
+
+
 function applySettings(){
   applyWidgets();applyAccent();
   // Show/hide mentor notes
@@ -2758,7 +2831,7 @@ function saveCatEdits(){
 // ═══════════════════════════════════════════════
 // TIME TRACKER + DOPAMINE BRAIN + TIME MENTOR
 // ═══════════════════════════════════════════════
-const TIME_CATS=[
+const DEFAULT_TIME_CATS=[
   {id:'sleep',    label:'Sleep',                color:'#5878b8', dopamine:0,   productive:0},
   {id:'work',     label:'Work / Valemont',      color:'#7ec8ff', dopamine:0,   productive:1},
   {id:'gym',      label:'Gym',                  color:'#48b878', dopamine:0,   productive:1},
@@ -2769,11 +2842,18 @@ const TIME_CATS=[
   {id:'mediap',   label:'Media — productive',   color:'#58a8a8', dopamine:0.3, productive:0.5},
   {id:'doom',     label:'Social media / doomscroll', color:'#e05a54', dopamine:1, productive:0},
 ];
+let TIME_CATS=JSON.parse(localStorage.getItem('mastery_timecats')||'null')||JSON.parse(JSON.stringify(DEFAULT_TIME_CATS));
+function saveTimeCats(){
+  localStorage.setItem('mastery_timecats',JSON.stringify(TIME_CATS));
+  categories=TIME_CATS.map(c=>({id:c.id,label:c.label,color:c.color}));
+  saveCategories();
+  scheduleSyncPush();
+}
 let selectedTimeCat='work';
 
 function timeLogKey(){return 'mastery_timelog_'+new Date().toISOString().split('T')[0];}
 function getTimeLog(){const l=JSON.parse(localStorage.getItem(timeLogKey())||'[]');l.forEach(e=>{if(e.cat==='deepwork')e.cat='work';});return l;}
-function setTimeLog(arr){localStorage.setItem(timeLogKey(),JSON.stringify(arr));}
+function setTimeLog(arr){localStorage.setItem(timeLogKey(),JSON.stringify(arr));scheduleSyncPush();}
 
 function openTimeSheet(){
   renderTimeCatGrid();
@@ -2896,7 +2976,7 @@ function renderTimeTracker(){
   const effEl=document.getElementById('day-eff');
   if(effEl){
     let prodM=0,awake=0;
-    TIME_CATS.forEach(c=>{const m2=totals[c.id]||0;if(c.id!=='sleep')awake+=m2;prodM+=m2*c.productive;});
+    TIME_CATS.forEach(c=>{const m2=totals[c.id]||0;if(c.id!=='sleep')awake+=m2;prodM+=m2*getCatW(c).p;});
     effEl.textContent=awake>0?Math.round(prodM/awake*100)+'% efficient':'';
   }
   renderBrain(totals);
@@ -2908,8 +2988,9 @@ function brainMetrics(totals){
   let junk=0,prod=0;
   TIME_CATS.forEach(c=>{
     const m=totals[c.id]||0;
-    junk+=m*c.dopamine;
-    prod+=m*c.productive;
+    const w=getCatW(c);
+    junk+=m*w.d;
+    prod+=m*w.p;
   });
   return {junk,prod};
 }
@@ -3013,13 +3094,14 @@ function renderGymWeekStrip(){
 
 // ─── REFLECTION PROMPTS ───
 const REFL_PROMPTS=[
-  "What did you do today that your future self will thank you for?",
-  "Where did you lose time today — and what did it cost you?",
-  "What's one thing you'd do differently if today restarted?",
-  "What did you avoid today, and why?",
+  "Biggest takeaway from today?",
+  "One thing you'll focus on tomorrow?",
+  "What are you most proud of today?",
   "What moved you closer to the offer today?",
-  "What would the person you're becoming have done differently?",
-  "What deserved more of your energy today?",
+  "Best decision you made today?",
+  "What gave you energy today?",
+  "What did you learn that you'll actually use?",
+  "What deserves more of you tomorrow?",
 ];
 function initReflection(){
   const d=new Date();
@@ -3089,11 +3171,7 @@ function renderWidgetToggles(){
       '<div class="toggle-switch'+(on?' on':'')+'" onclick="toggleWidget(\''+w.key+'\')"><div class="toggle-knob"></div></div></div>';
   }).join('');
 }
-function toggleWidget(key){
-  if(!appSettings.widgets)appSettings.widgets={};
-  appSettings.widgets[key]=appSettings.widgets[key]===false?true:false;
-  renderWidgetToggles();
-}
+
 function renderAccentSwatches(){
   const el=document.getElementById('accent-swatches');
   if(!el)return;
@@ -3102,7 +3180,7 @@ function renderAccentSwatches(){
     '<div class="accent-swatch'+(a.v===cur?' on':'')+'" style="background:'+a.v+'" title="'+a.name+'" onclick="pickAccent(\''+a.v+'\')"></div>'
   ).join('');
 }
-function pickAccent(v){appSettings.accent=v;renderAccentSwatches();applyAccent();}
+
 function applyAccent(){
   const v=appSettings.accent||'#7ec8ff';
   const rgb=hexToRgb(v);
@@ -3159,9 +3237,8 @@ function renderMission(){
   if(!el)return;
   el.innerHTML=endYearGoals.map((g,i)=>
     '<div class="mission-row" onclick="goTab(\'morning\',0);setTimeout(()=>expandGoalChip('+i+'),200)">'+
-    '<div class="mission-dot" style="background:'+g.color+';box-shadow:0 0 8px '+g.color+'"></div>'+
-    '<div class="mission-title">'+g.title+'</div>'+
-    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--ink4)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></div>'
+    '<div class="mission-dot" style="background:'+g.color+'"></div>'+
+    '<div class="mission-title">'+g.title+'</div></div>'
   ).join('');
 }
 
@@ -3176,7 +3253,7 @@ function exportDayReport(){
   const totals={};log.forEach(e=>{totals[e.cat]=(totals[e.cat]||0)+e.mins;});
   const totalM=Object.values(totals).reduce((a,b)=>a+b,0);
   let prodM=0,awake=0;
-  TIME_CATS.forEach(c=>{const mm=totals[c.id]||0;if(c.id!=='sleep')awake+=mm;prodM+=mm*c.productive;});
+  TIME_CATS.forEach(c=>{const mm=totals[c.id]||0;if(c.id!=='sleep')awake+=mm;prodM+=mm*getCatW(c).p;});
   const eff=awake>0?Math.round(prodM/awake*100):0;
   const nowM=now.getHours()*60+now.getMinutes();
   const unacc=Math.max(0,nowM-totalM);
@@ -3222,6 +3299,99 @@ function exportDayReport(){
   printEl.style.display='block';
   setTimeout(()=>{window.print();setTimeout(()=>{printEl.style.display='none';},1200);},200);
 }
+
+
+// ═══════════════════════════════════════════
+// CLOUD SYNC — phone ↔ computer, survives updates
+// ═══════════════════════════════════════════
+let syncTO=null;
+function syncCode(){return ((appSettings.syncCode||'')+'').trim();}
+function collectSyncData(){
+  const data={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if((k.startsWith('mastery')||k.startsWith('m_'))&&k!=='mastery_sync_updated')data[k]=localStorage.getItem(k);
+  }
+  return data;
+}
+async function syncPush(){
+  const id=syncCode();if(id.length<4)return;
+  const updatedAt=Date.now();
+  try{
+    const r=await fetch('/api/sync?id='+encodeURIComponent(id),{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({updatedAt,data:collectSyncData()})
+    });
+    if(r.ok){localStorage.setItem('mastery_sync_updated',updatedAt);
+      const st=document.getElementById('sync-status');if(st)st.textContent='Synced just now';}
+  }catch(e){}
+}
+function scheduleSyncPush(){
+  if(syncCode().length<4)return;
+  clearTimeout(syncTO);
+  syncTO=setTimeout(syncPush,2500);
+}
+async function syncPull(manual){
+  const id=syncCode();if(id.length<4)return;
+  try{
+    const r=await fetch('/api/sync?id='+encodeURIComponent(id));
+    const j=await r.json();
+    if(!j.data)return;
+    const localMark=parseInt(localStorage.getItem('mastery_sync_updated')||'0');
+    if(j.data.updatedAt>localMark){
+      Object.keys(j.data.data||{}).forEach(k=>{
+        if(k.startsWith('mastery')||k.startsWith('m_'))localStorage.setItem(k,j.data.data[k]);
+      });
+      localStorage.setItem('mastery_sync_updated',j.data.updatedAt);
+      showToast('Synced from cloud — reloading','s');
+      setTimeout(()=>location.reload(),700);
+    } else if(manual){showToast('Already up to date','s');}
+  }catch(e){if(manual)showToast('Sync failed — check setup','w');}
+}
+function syncNow(){syncPull(true);setTimeout(syncPush,1200);}
+
+
+// ─── DAILY QUOTE ───
+const QUOTES_LIB=[
+  "Discipline is choosing between what you want now and what you want most.",
+  "The market pays for judgment. Judgment is built in hours nobody sees.",
+  "Hard choices, easy life. Easy choices, hard life.",
+  "You do not rise to the level of your goals. You fall to the level of your systems.",
+  "Amateurs wait for motivation. Professionals keep a schedule.",
+  "The pain of discipline weighs ounces. The pain of regret weighs tons.",
+  "Every dial you don't make, someone else does.",
+  "Comparison is the thief of joy, but competition is the maker of careers.",
+  "Slow is smooth. Smooth is fast.",
+  "What you do every day matters more than what you do once in a while.",
+];
+let quoteOffset=parseInt(localStorage.getItem('mastery_quote_offset')||'0');
+function allQuotes(){
+  const custom=(appSettings.customQuotes||[]).filter(q=>q.trim());
+  const legacy=appSettings.customQuote?[appSettings.customQuote]:[];
+  return [...QUOTES_LIB,...legacy,...custom];
+}
+function renderDailyQuote(){}
+function nextDailyQuote(){}
+
+
+// ─── GOALS EDITOR ───
+
+function cycleGoalColor(i,dot){
+  const cur=endYearGoals[i].color;
+  const idx=CAT_COLORS.indexOf(cur);
+  endYearGoals[i].color=CAT_COLORS[(idx+1)%CAT_COLORS.length];
+  if(dot)dot.style.background=endYearGoals[i].color;
+}
+
+
+// ─── TIME CATEGORY WEIGHTS ───
+function getCatW(c){
+  const o=(appSettings.catWeights||{})[c.id];
+  return o||{d:c.dopamine,p:c.productive};
+}
+function catMode(c){const w=getCatW(c);return w.d>=0.5?'junk':(w.p>=0.5?'prod':'neutral');}
+
+
 
 function scheduleNudges(){setTimeout(()=>showNudge(),90000);setInterval(()=>showNudge(),480000);}
 function showNudge(){
@@ -3590,28 +3760,50 @@ function renderTrackers(){
 function renderCareerCoach(){
   const el=document.getElementById('career-coach');
   if(!el)return;
-  if(appSettings.showMentor===false){el.innerHTML='';return;}
-  // Days left in the week (Mon-Sun), today counts
-  const day=new Date().getDay();               // 0 Sun..6 Sat
-  const daysLeft=day===0?1:(8-day);
+  // ── PACE (days remaining after today) ──
+  const day=new Date().getDay();
+  const daysLeft=Math.max(1,day===0?1:(7-day));
+  const netGoal=appSettings.netGoal||50, dialsGoal=appSettings.dialsGoal||500, prepGoal=appSettings.prepGoal||14;
+  const prepH=Math.round((S.ib.prep||0)/60*10)/10;
   const rows=[
-    {l:'Dials',cur:S.ib.dials||0,goal:appSettings.dialsGoal||500,unit:'',c:'var(--purple)'},
-    {l:'Emails',cur:S.ib.networking||0,goal:appSettings.netGoal||50,unit:'',c:'var(--green)'},
-    {l:'Prep',cur:Math.round((S.ib.prep||0)/60*10)/10,goal:appSettings.prepGoal||14,unit:'h',c:'var(--blue)'},
+    {l:'Dials',cur:S.ib.dials||0,goal:dialsGoal,unit:'',c:'var(--purple)'},
+    {l:'Emails',cur:S.ib.networking||0,goal:netGoal,unit:'',c:'var(--green)'},
+    {l:'Prep',cur:prepH,goal:prepGoal,unit:'h',c:'var(--blue)'},
   ];
-  const lines=rows.map(r=>{
+  const paceLines=rows.map((r,idx)=>{
     const left=Math.max(0,r.goal-r.cur);
     const perDay=left>0?Math.ceil((left/daysLeft)*10)/10:0;
     const done=left===0;
-    return '<div style="display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--sep)">'+
+    return '<div style="display:flex;align-items:baseline;justify-content:space-between;padding:8px 0;'+(idx<rows.length-1?'border-bottom:0.5px solid var(--sep)':'')+'">'+
       '<span style="font-size:13px;font-weight:600;color:var(--ink2)">'+r.l+'</span>'+
       '<span style="font-size:13px;font-weight:700;color:'+(done?'var(--green)':r.c)+'">'+
-      (done?'Target hit':perDay+r.unit+' / day to hit '+r.goal+r.unit)+'</span></div>';
+      (done?'Target hit':perDay+r.unit+'/day from tomorrow → '+r.goal+r.unit)+'</span></div>';
   }).join('');
-  el.innerHTML='<div class="glass-card" style="padding:6px 18px;margin-bottom:12px">'+lines.replace(/border-bottom:0.5px solid var\(--sep\)">(?=[^<]*<\/span><\/div>$)/,'">')+'</div>';
-  // strip last border
-  const last=el.querySelector('.glass-card > div:last-child');
-  if(last)last.style.borderBottom='none';
+  let out='<div class="glass-card" style="padding:6px 18px;margin-bottom:12px">'+paceLines+'</div>';
+
+  // ── MENTOR — accurate accountability notes ──
+  if(appSettings.showMentor!==false){
+    const warnIcon='<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+    const goodIcon='<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+    const msgs=[];
+    const dials=S.ib.dials||0, net=S.ib.networking||0, learn=S.ib.learn||0;
+    if(dials>=dialsGoal) msgs.push({c:'good',label:'Dials',icon:goodIcon,t:'<strong>'+dials.toLocaleString()+' dials — weekly goal hit.</strong> This is the volume that builds real sourcing instinct.'});
+    else msgs.push({c:'warn',label:'Dials',icon:warnIcon,t:'<strong>'+dials.toLocaleString()+' of '+dialsGoal.toLocaleString()+' dials logged.</strong> '+(dialsGoal-dials).toLocaleString()+' remaining this week. The pipeline is built one conversation at a time.'});
+    if(net>=netGoal) msgs.push({c:'good',label:'Networking',icon:goodIcon,t:'<strong>'+net+' emails — goal reached.</strong> You are building the pipeline most candidates ignore.'});
+    else msgs.push({c:'warn',label:'Networking',icon:warnIcon,t:'<strong>'+net+' of '+netGoal+' emails sent.</strong> '+(netGoal-net)+' to go. Every reply starts with a send.'});
+    if(prepH>=prepGoal) msgs.push({c:'good',label:'Prep',icon:goodIcon,t:'<strong>'+prepH+'h of prep — target hit.</strong> The superday will feel like a formality.'});
+    else if(prepH>0) msgs.push({c:'warn',label:'Prep',icon:warnIcon,t:'<strong>'+prepH+'h of '+prepGoal+'h prep logged.</strong> '+(Math.round((prepGoal-prepH)*10)/10)+'h left this week.'});
+    else msgs.push({c:'warn',label:'Prep',icon:warnIcon,t:'<strong>No prep logged this week yet.</strong> The offer goes to whoever shows up ready.'});
+    if(learn===0) msgs.push({c:'warn',label:'Learning',icon:warnIcon,t:'<strong>No insightful learning today.</strong> Thirty minutes of Buffett or a breakdown compounds into judgment.'});
+    out+=msgs.slice(0,3).map(mm=>
+      '<div class="mentor-note '+mm.c+'" style="cursor:grab">'+
+      '<div class="mentor-note-head"><div class="mentor-note-icon">'+mm.icon+'</div><div class="mentor-note-label">'+mm.label+'</div>'+
+      '<div style="margin-left:auto;font-size:10px;color:var(--ink4);font-weight:500">swipe to dismiss</div></div>'+
+      '<div class="mentor-note-body">'+mm.t+'</div></div>'
+    ).join('');
+  }
+  el.innerHTML=out;
+  setTimeout(makeSwipeableAll,50);
 }
 
 function renderHealthRatings(){
@@ -3739,6 +3931,11 @@ let wtPausedSecs = TIMER_DURATION;
 let wtRunning = false;
 let wtInt = null;
 
+let wtClickTO=null;
+function clickWT(){
+  if(wtClickTO){clearTimeout(wtClickTO);wtClickTO=null;resetWT();return;} // second tap fast = reset
+  wtClickTO=setTimeout(()=>{wtClickTO=null;toggleWT();},260);
+}
 function toggleWT(){wtRunning ? pauseWT() : startWT();}
 
 function startWT(){
@@ -4511,5 +4708,5 @@ if('serviceWorker' in navigator){
   });
 }
 </script>
-<script src="/sync.js" defer></script>
-</body></html>
+</body>
+</html>

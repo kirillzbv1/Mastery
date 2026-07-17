@@ -4725,6 +4725,17 @@ function showToast(msg,type=''){
   const el=document.getElementById('toast');el.textContent=msg;el.className='toast show'+(type?' '+type:'');
   clearTimeout(tTO);tTO=setTimeout(()=>el.classList.remove('show'),2600);
 }
+
+  // Safety net: ensure key dynamic sections always render, even if an
+  // earlier error interrupted the initial load sequence.
+  window.addEventListener('load', ()=>{
+        setTimeout(()=>{
+                try{renderChecklist();}catch(e){console.error('renderChecklist retry failed',e);}
+                try{renderTrackers();}catch(e){console.error('renderTrackers retry failed',e);}
+                try{initReflection();}catch(e){console.error('initReflection retry failed',e);}
+                try{renderMission();}catch(e){console.error('renderMission retry failed',e);}
+        },600);
+  });
 </script>
 <script>
 if('serviceWorker' in navigator){

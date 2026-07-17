@@ -1,5 +1,5 @@
 // Bump this version every deploy — Vercel auto-deploys trigger a new install
-const CACHE = 'mastery-v12';
+const CACHE = 'mastery-v14';
 const ASSETS = ['/manifest.json', '/icons/icon-192.png'];
 
 self.addEventListener('install', e => {

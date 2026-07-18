@@ -2212,7 +2212,19 @@ let endYearGoals=JSON.parse(localStorage.getItem('mastery_goals')||'null')||[
 const visionReminders=[
   "You are building toward something that previous generations in your family couldn't access. <strong>That means something.</strong> Every session, every email, every morning you execute is an act of gratitude for the opportunity in front of you.",
   "The hedge fund manager you want to become is not a distant dream — it's the compounded result of <strong>what you do today, and tomorrow, and the day after.</strong> Consistency is the only strategy that works.",
-  "Success here is not about being the smartest person in the room. It's about being the most prepared, the most consistent, and the most relentless. <strong>You control all three.</strong>"
+  "Success here is not about being the smartest person in the room. It's about being the most prepared, the most consistent, and the most relentless. <strong>You control all three.</strong>",
+  "Discipline is not a punishment you're inflicting on yourself. <strong>It's the price of admission</strong> to the life you're trying to build. Pay it today, and pay it again tomorrow.",
+  "Nobody is coming to save you from doing the work. <strong>That's the good news.</strong> It means the outcome is entirely in your hands.",
+  "The version of you that gets the offer is not smarter than you are right now. <strong>They just showed up more consistently.</strong> Be that person today.",
+  "Motivation gets you started. <strong>Systems and repetition get you there.</strong> Trust the process you built, even on the days it feels slow.",
+  "Every rep you skip is a rep someone else didn't. <strong>Somewhere, someone is outworking you right now.</strong> Match that energy today.",
+  "You don't need a perfect day. <strong>You need a day where you didn't quit.</strong> Small, honest effort compounds faster than people admit.",
+  "The gap between where you are and where you want to be is closed one uncomfortable hour at a time. <strong>Choose the uncomfortable hour.</strong>",
+  "This is the season you'll look back on and say 'that's when everything changed.' <strong>Make sure it's true.</strong> Earn the story.",
+  "Comfort is the enemy of the future you keep saying you want. <strong>Today, pick growth over comfort</strong> — even in the small decisions.",
+  "You are not behind. <strong>You are exactly where consistent effort will eventually take you</strong> — as long as you don't stop today.",
+  "The people you're competing with for the offer are grinding right now, not waiting for motivation. <strong>Don't wait for it either.</strong>",
+  "Every goal you check off today is a deposit into a version of yourself that doesn't quit. <strong>Make the deposit.</strong>",
 ];
 
 const quotes=[
@@ -2313,7 +2325,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   const quoteIdx=Math.floor(Date.now()/18000000)%quotes.length;
   const dqEl=document.getElementById('daily-quote');
   if(dqEl){dqEl.textContent=quotes[quoteIdx];const msToNext=18000000-(Date.now()%18000000);setTimeout(()=>{const d2=document.getElementById('daily-quote');if(d2)d2.textContent=quotes[(quoteIdx+1)%quotes.length];},msToNext);}
-  document.getElementById('vision-text').innerHTML=visionReminders[now.getDate()%visionReminders.length];
+  const __nsIdx=now.getDate()%visionReminders.length;const __nsHtml=visionReminders[__nsIdx];document.getElementById('vision-text').innerHTML=__nsHtml;const __nsPrevEl=document.getElementById('vision-text-preview');if(__nsPrevEl)__nsPrevEl.innerHTML=__nsHtml;
   document.getElementById('score-date').textContent=`${months[now.getMonth()]} ${now.getDate()}`;
   const yc=localStorage.getItem('mastery_yc');
   if(yc){document.getElementById('continuity-text').textContent=yc;document.getElementById('continuity-card').style.display='block';}

@@ -2016,11 +2016,18 @@ let S=JSON.parse(localStorage.getItem(SK)||'null')||{
 function save(){localStorage.setItem(SK,JSON.stringify(S));scheduleSyncPush();}
 
 const today=new Date().toDateString();
-if(localStorage.getItem('mastery_day')!==today){
+const __prevDayStr=localStorage.getItem('mastery_day');
+if(__prevDayStr!==today){
   if(S.refl.text) localStorage.setItem('mastery_yc',S.refl.text.substring(0,140));
-  // Archive full day before resetting
-  archiveDayData();
-  saveDayScore(calcScore());
+  // Archive full day before resetting -- use the date that is actually ending
+  // (the previous value of mastery_day), not "today", since S still holds
+  // yesterday's data at this point. Using today's date here was the bug that
+  // made yesterday's progress mislabeled and missing from Stats.
+  if(__prevDayStr){
+    const __prevISO=new Date(__prevDayStr).toISOString().split('T')[0];
+    archiveDayData(__prevISO);
+    saveDayScore(calcScore(),__prevISO);
+  }
   S.checks=[false,false,false,false,false];
   S.deepWorkBlocks=0;S.scrollMins=0;S.goals='';S.goalsLocked=false;
   S.schedule=[]; // reset schedule each day
@@ -2031,8 +2038,8 @@ if(localStorage.getItem('mastery_day')!==today){
 }
 
 // Archive full day's data for history browsing
-function archiveDayData(){
-  const ds=new Date().toISOString().split('T')[0];
+function archiveDayData(dateOverride){
+  const ds=dateOverride||new Date().toISOString().split('T')[0];
   const archive=JSON.parse(localStorage.getItem('mastery_archive')||'{}');
   archive[ds]={
     goals:S.goals,
@@ -2051,10 +2058,10 @@ function archiveDayData(){
 }
 
 // ── SCORE HISTORY ──
-function saveDayScore(pct){
+function saveDayScore(pct,dateOverride){
   const key='mastery_scores';
   let hist=JSON.parse(localStorage.getItem(key)||'[]');
-  const ds=new Date().toISOString().split('T')[0];
+  const ds=dateOverride||new Date().toISOString().split('T')[0];
   hist=hist.filter(d=>d.date!==ds);
   hist.push({date:ds,score:pct});
   if(hist.length>366) hist=hist.slice(-366);
